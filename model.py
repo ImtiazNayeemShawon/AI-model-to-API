@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.pipeline import make_pipeline
@@ -22,6 +23,7 @@ model = make_pipeline(CountVectorizer(), MultinomialNB())
 model.fit(sentences, labels)
 
 app = Flask(__name__)
+CORS(app)  # Enable CORS for all routes
 
 @app.route('/predict', methods=['POST'])
 def predict_sentiment():
@@ -38,5 +40,5 @@ def predict_sentiment():
     })
 
 if __name__ == '__main__':
-    port = int(os.environ.get("PORT", 5000))  
+    port = int(os.environ.get("PORT", 8000))  
     app.run(host='0.0.0.0', port=port)
