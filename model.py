@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.pipeline import make_pipeline
+import os
 
 # Create and train the model
 sentences = [
@@ -20,7 +21,6 @@ labels = [1, 1, 1, 1, 0, 0, 0, 0]
 model = make_pipeline(CountVectorizer(), MultinomialNB())
 model.fit(sentences, labels)
 
-# Create a Flask app
 app = Flask(__name__)
 
 @app.route('/predict', methods=['POST'])
@@ -38,4 +38,5 @@ def predict_sentiment():
     })
 
 if __name__ == '__main__':
-    app.run(port=5000, debug=True)
+    port = int(os.environ.get("PORT", 5000))  
+    app.run(host='0.0.0.0', port=port)
